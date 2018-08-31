@@ -2,6 +2,9 @@
 
 High-resolution micro-benchmarking in Node.js.
 
+## Install
+`npm install spazmodius/hrbench -D`
+
 ## Usage
 
 ```js
