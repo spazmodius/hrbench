@@ -1,0 +1,7 @@
+{
+  "name": "@spazmodius/hrbench",
+  "version": "1.0.0",
+  "description": "Accurate benchmarking for Nodejs",
+  "repository": "github:spazmodius/hrbench",
+  "main": "hrbench.js"
+}
