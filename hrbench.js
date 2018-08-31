@@ -26,6 +26,20 @@ Benchmark.prototype.onTestInitialized = function onTestInitialized(handler) {
 Benchmark.prototype.test = function test(name, fn, noop) {
 	if (this.state !== STATE.NotStarted)
 		throw new Error('Cannot add tests; ' + this.state)
+
+	if (typeof name === 'function') {
+		noop = fn
+		fn = name
+		name = undefined
+	}
+	else if (typeof name !== 'string')
+		throw new RangeError('Optional argument `name` must be a string')
+
+	if (typeof fn !== 'function')
+		throw new RangeError('Required argument `fn` must be a function')
+	if (noop !== undefined && typeof noop !== 'function' && noop !== null)
+		throw new RangeError('Optional argument `noop` must be a function or null')
+
 	this.tests.push(Test.make(this, name, fn, noop))
 	return this
 }

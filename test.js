@@ -11,11 +11,6 @@ const SECONDS_PER_ROUND = 0.1
 const ACCEPTABLE_RELATIVE_MOE = 0.01
 
 function make(benchmark, name, fn, noop) {
-	if (typeof name === 'function') {
-		noop = fn
-		fn = name
-		name = undefined
-	}
 	return {
 		benchmark,
 		name: testName(name, fn),
