@@ -23,6 +23,10 @@ function ceil() {
 	return Math.ceil(randomNumber())
 }
 
+function trunc() {
+	return Math.trunc(randomNumber())
+}
+
 function orZero() {
 	return randomNumber() | 0
 }
@@ -31,12 +35,18 @@ function shiftZero() {
 	return randomNumber >> 0
 }
 
+function ushiftZero() {
+	return randomNumber >>> 0
+}
+
 new Benchmark()
 	.test('Math.round()', round, randomNumber)
 	.test('Math.floor()', floor, randomNumber)
 	.test('Math.ceil()', ceil, randomNumber)
+	.test('Math.trunc()', trunc, randomNumber)
 	.test('x | 0', orZero, randomNumber)
 	.test('x >> 0', shiftZero, randomNumber)
+	.test('x >>> 0', ushiftZero, randomNumber)
 	.run()
 	.then(Benchmark.summarize)
 	.then(console.log)

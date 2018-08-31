@@ -25,7 +25,6 @@ const result = (cycles, ns) => ({
 	cycles,
 	ns,
 	hz: cycles / (ns / 1e9),
-	nsper: ns / cycles,
 })
 
 const toNanoseconds = (seconds) => Math.round(seconds * 1e9)

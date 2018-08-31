@@ -2,7 +2,7 @@
 
 const SIGNIFICANT_DIGITS = 2
 
-const scoreLine = (score) => `${score.score} hz  ${score.nsper} ns/op  ${score.name}`
+const scoreLine = (score) => `${score['op/s']} hz  ${score['ns/op']} ns/op  ${score.name}`
 const errorLine = (failed) => `${failed.name}: ${failed.error.toString()}`
 
 function summarize(benchmark) {
@@ -24,19 +24,21 @@ function header(benchmark) {
 function scores(tests) {
 	if (tests.length === 0) return []
 	const scores = tests.map(preformat)
-	align(scores, 'score')
-	align(scores, 'nsper')
+	align(scores, 'op/s')
+	align(scores, 'ns/op')
 	return scores
 		.sort(compare)
 		.map(scoreLine)
 }
 
 function preformat(test) {
+	const hz = test.result.ns > 0? test.result.hz: Infinity
+	const nsper = Math.max(test.result.ns, 0) / test.result.cycles
 	return {
 		name: test.name.slice(0, 40),
-		score: friendlyNumber(test.result.hz),
-		hz: test.result.hz,
-		nsper: friendlyNumber(test.result.nsper),
+		hz,
+		'op/s': friendlyNumber(hz),
+		'ns/op': friendlyNumber(nsper),
 	}
 }
 
