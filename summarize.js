@@ -24,7 +24,8 @@ function header(benchmark) {
 function scores(tests) {
 	if (tests.length === 0) return []
 	const scores = tests.map(preformat)
-	align(scores)
+	align(scores, 'score')
+	align(scores, 'nsper')
 	return scores
 		.sort(compare)
 		.map(scoreLine)
@@ -46,17 +47,17 @@ function friendlyNumber(number) {
 	})
 }
 
-function align(scores) {
-	let lengths = scores.map(score => score.score.split('.')[0].length)
+function align(scores, property) {
+	let lengths = scores.map(score => score[property].split('.')[0].length)
 	let maxLength = Math.max(...lengths)
 	scores.forEach((score, i) => {
-		score.score = ' '.repeat(maxLength - lengths[i]) + score.score
+		score[property] = ' '.repeat(maxLength - lengths[i]) + score[property]
 	})
 
-	lengths = scores.map(score => score.score.length)
+	lengths = scores.map(score => score[property].length)
 	maxLength = Math.max(...lengths)
 	scores.forEach(score => {
-		score.score = score.score.padEnd(maxLength, ' ')
+		score[property] = score[property].padEnd(maxLength, ' ')
 	})
 }
 
