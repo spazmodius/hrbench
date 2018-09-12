@@ -8,6 +8,7 @@ High-resolution micro-benchmarking in Node.js.
 ## Usage
 
 ```js
+const crypto = require('crypto')
 const Benchmark = require('@spazmodius/hrbench')
 
 // create a benchmark
