@@ -22,7 +22,6 @@ function make(benchmark, name, fn, noop) {
 		cycles: NaN,
 		result: null,
 		stats: new Statistics,
-		relativeMOE: NaN,
 		runs: [],
 	}
 }
