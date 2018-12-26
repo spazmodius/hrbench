@@ -8,6 +8,8 @@
 const Benchmark = require('../hrbench')
 
 function randomNumber() {
+	// random real number between
+	// negative one-billion and positive one-billion
 	return (Math.random() - 0.5) * 2e9
 }
 
@@ -32,11 +34,11 @@ function orZero() {
 }
 
 function shiftZero() {
-	return randomNumber >> 0
+	return randomNumber() >> 0
 }
 
 function ushiftZero() {
-	return randomNumber >>> 0
+	return randomNumber() >>> 0
 }
 
 new Benchmark()
