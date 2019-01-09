@@ -2,15 +2,16 @@
 const Test = require('./test')
 const STATE = require('./state')
 
-function Benchmark() {
+function Benchmark(options = {}) {
 	if (!(this instanceof Benchmark))
-		return new Benchmark()
+		return new Benchmark(options)
 
 	this.state = STATE.NotStarted
 	this.error = null
 	this.tests = []
 	this._onTestInitialized = function() {}
 	this._onTestRound = function() {}
+	this.options = options
 }
 
 Benchmark.prototype.onTestRound = function onTestRound(handler) {
