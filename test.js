@@ -1,5 +1,5 @@
 'use strict'
-const code = require('./code')
+const codeOf = require('./codeOf')
 const Statistics = require('./statistics')
 const defer = require('./defer')
 const core = require('./core')
@@ -13,7 +13,7 @@ const ACCEPTABLE_RELATIVE_MOE = 0.01
 function make(benchmark, name, fn, noop) {
 	return {
 		benchmark,
-		name: name || fn.name || code(fn),
+		name: name || fn.name || codeOf(fn),
 		fn,
 		noop: noop,
 		state: STATE.NotStarted,

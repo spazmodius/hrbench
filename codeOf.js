@@ -1,8 +1,7 @@
 /*
-	testName(suggested, fn)
+	codeOf(fn)
 
-	Come up with a good test name, using `suggested` if possible,
-	otherwise trying the function name or it's code.
+	Return the javascript body of the function `fn`.
 */
 'use strict'
 
@@ -46,7 +45,7 @@ function pipe(value, ...fns) {
 	return fns.reduce((value, fn) => fn(value, originalValue), value)
 }
 
-function code(fn) {
+function codeOf(fn) {
 	return pipe(compress(fn.toString()),
 		stripFunctionDecl,
 		stripArrowDecl,
@@ -54,4 +53,4 @@ function code(fn) {
 	)
 }
 
-module.exports = code
+module.exports = codeOf
