@@ -1,5 +1,5 @@
 /*
-	estimate(fn, maxSeconds)
+	estimate(fn, maxSeconds, [maxCycles])
 	Find an inital estimate of performance.
 
 	run(cycles, fn, noop)
@@ -33,10 +33,10 @@ const toNanoseconds = (seconds) => Math.round(seconds * 1e9)
 // until we reach the time limit `maxSeconds` (defaults to half-a-second).
 // But in no case let `cycles` get larger than 32 bits, since
 // that changes the overhead characteristics of `measure()`.
-function estimate(fn, maxSeconds) {
-	const maxNanoseconds = toNanoseconds(maxSeconds || HALF_SECOND)
+function estimate(fn, maxSeconds = HALF_SECOND, maxCycles = MAX_CYCLES) {
+	const maxNanoseconds = toNanoseconds(maxSeconds)
 	let r = ZERO
-	for (let cycles = MIN_CYCLES; cycles < MAX_CYCLES && r.ns < maxNanoseconds; cycles *= 2) {
+	for (let cycles = MIN_CYCLES; cycles < maxCycles && r.ns < maxNanoseconds; cycles *= 2) {
 		const ns = measure(cycles, fn)
 		r = result(cycles, ns)
 	}
@@ -58,5 +58,6 @@ function accumulate(r1, r2) {
 module.exports = {
 	estimate,
 	run,
-	accumulate
+	accumulate,
+	MAX_CYCLES,
 }

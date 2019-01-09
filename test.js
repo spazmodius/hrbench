@@ -4,6 +4,7 @@ const Statistics = require('./statistics')
 const defer = require('./defer')
 const core = require('./core')
 const STATE = require('./state')
+const clamp = require('./clamp')
 
 const MIN_ROUNDS = 5
 const MAX_ROUNDS = 30
@@ -23,6 +24,7 @@ function make(benchmark, name, fn, noop) {
 		result: null,
 		stats: new Statistics,
 		runs: [],
+		maxCycles: Number(benchmark.options.maxCycles) || core.MAX_CYCLES,
 	}
 }
 
@@ -37,8 +39,8 @@ function run(test) {
 
 function initialize(test) {
 	test.state = STATE.Running
-	test.prelim = core.estimate(test.fn, SECONDS_PER_ROUND)
-	test.cycles = test.prelim.hz * SECONDS_PER_ROUND
+	test.prelim = core.estimate(test.fn, SECONDS_PER_ROUND, test.maxCycles)
+	test.cycles = clamp(test.prelim.hz * SECONDS_PER_ROUND, 1, test.maxCycles)
 	test.benchmark._onTestInitialized(test)
 	return test
 }
