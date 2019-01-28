@@ -13,6 +13,8 @@ function randomNumber() {
 	return (Math.random() - 0.5) * 2e9
 }
 
+function noop() { return randomNumber() }
+
 function round() {
 	return Math.round(randomNumber())
 }
@@ -41,14 +43,19 @@ function ushiftZero() {
 	return randomNumber() >>> 0
 }
 
+function doubleInverse() {
+	return ~~randomNumber()
+}
+
 new Benchmark()
-	.test('Math.round()', round, randomNumber)
-	.test('Math.floor()', floor, randomNumber)
-	.test('Math.ceil()', ceil, randomNumber)
-	.test('Math.trunc()', trunc, randomNumber)
-	.test('x | 0', orZero, randomNumber)
-	.test('x >> 0', shiftZero, randomNumber)
-	.test('x >>> 0', ushiftZero, randomNumber)
+	.test('Math.round()', round, noop)
+	.test('Math.floor()', floor, noop)
+	.test('Math.ceil()', ceil, noop)
+	.test('Math.trunc()', trunc, noop)
+	.test('x | 0', orZero, noop)
+	.test('x >> 0', shiftZero, noop)
+	.test('x >>> 0', ushiftZero, noop)
+	.test('~~x', doubleInverse, noop)
 	.run()
 	.then(Benchmark.summarize)
 	.then(console.log)
