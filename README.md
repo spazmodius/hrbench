@@ -26,12 +26,7 @@ bench
 	.test(() => crypto.randomBytes(15000))
 
 // finally, run them and get back a Promise
-bench.run()
-	// when the benchmark completes, summarize it
-	.then(Benchmark.summarize)
-	// and print
-	.then(console.log)
-	.catch(console.error)
+bench.go()
 ```
 
 ## Ansync tests

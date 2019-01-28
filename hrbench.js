@@ -67,6 +67,15 @@ function _run(tests) {
 	return Promise.all(runningTests)
 }
 
+let queue = Promise.resolve()
+
+Benchmark.prototype.go = function go() {
+	const run = () => this.run()
+		.then(Benchmark.summarize)
+		.then(console.log)
+	return queue = queue.then(run)
+}
+
 Benchmark.summarize = require('./summarize')
 Benchmark.STATE = STATE
 
