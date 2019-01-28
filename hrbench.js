@@ -49,9 +49,13 @@ Benchmark.prototype.test = function test(name, fn, noop) {
 Benchmark.prototype.run = function run() {
 	if (this.state !== STATE.NotStarted)
 		throw new Error('Cannot run; ' + this.state)
+	return _run.call(this)
+}
+
+function _run() {
 	this.state = STATE.Running
 
-	return _run(this.tests)
+	return _runTests(this.tests)
 		.then(() => {
 			this.state = STATE.Complete
 			return this
@@ -62,7 +66,7 @@ Benchmark.prototype.run = function run() {
 		})
 }
 
-function _run(tests) {
+function _runTests(tests) {
 	const runningTests = tests.map(Test.run)
 	return Promise.all(runningTests)
 }
@@ -70,10 +74,14 @@ function _run(tests) {
 let queue = Promise.resolve()
 
 Benchmark.prototype.go = function go() {
-	const run = () => this.run()
+	if (this.state !== STATE.NotStarted)
+		throw new Error('Cannot go; ' + this.state)
+	this.state = STATE.Queued
+
+	const run = () => _run.call(this)
 		.then(Benchmark.summarize)
 		.then(console.log)
-	return queue = queue.then(run)
+	return queue = queue.then(run).catch(console.error)
 }
 
 Benchmark.summarize = require('./summarize')
