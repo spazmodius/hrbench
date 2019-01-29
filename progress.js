@@ -9,7 +9,7 @@ function progress(benchmark) {
 
 function onStateChange(oldState) {
 	if (this.state === STATE.Running) {
-		stdout.write(this.name + ' ')
+		stdout.write('\n' + this.name + ' ')
 	}
 }
 

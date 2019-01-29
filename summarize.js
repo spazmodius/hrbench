@@ -16,7 +16,7 @@ function summarize(benchmark) {
 
 function header(benchmark) {
 	return [
-		benchmark.state,
+		': ' + benchmark.state,
 		benchmark.error? benchmark.error.toString(): ''
 	]
 }

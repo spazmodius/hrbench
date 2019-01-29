@@ -13,7 +13,7 @@ const Benchmark = require('../hrbench')
 function function_noop() {}
 const lambda_noop = () => {}
 
-new Benchmark()
+new Benchmark('Function call overhead')
 	.test(_ => _, null)
 	.test(function(_) { return _ }, null)
 	.test(lambda_noop, null)
