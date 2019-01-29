@@ -9,13 +9,14 @@ function progress(benchmark) {
 
 function onStateChange(oldState) {
 	if (this.state === STATE.Running) {
-		const dots = '.'.repeat(this.tests.length)
-		stdout.write(`${this.name} ${dots}`)
+		stdout.write(this.name + ' ')
 	}
 }
 
 function onTestStateChange(test, oldState) {
-	if (test.state === STATE.Complete || test.state === STATE.Failed)
+	if (test.state === STATE.Running)
+		stdout.write('.')
+	else if (test.state === STATE.Complete || test.state === STATE.Failed)
 		stdout.write('\x08 \x08')
 }
 
