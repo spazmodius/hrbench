@@ -7,7 +7,7 @@ const progress = require('./progress')
 
 inherits(Benchmark, EventEmitter)
 
-function Benchmark(name, options = {}) {
+function Benchmark(name, options) {
 	if (!(this instanceof Benchmark))
 		return new Benchmark(name, options)
 	EventEmitter.call(this)
@@ -21,7 +21,7 @@ function Benchmark(name, options = {}) {
 	this._state = STATE.NotStarted
 	this.error = null
 	this.tests = []
-	this.options = options
+	this.options = options || {}
 
 	progress(this)
 }

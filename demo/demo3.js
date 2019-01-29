@@ -47,7 +47,7 @@ function doubleInverse() {
 	return ~~randomNumber()
 }
 
-const b = new Benchmark()
+const b = new Benchmark("Force number to integer")
 	.test('Math.round()', round, noop)
 	.test('Math.floor()', floor, noop)
 	.test('Math.ceil()', ceil, noop)
