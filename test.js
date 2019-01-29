@@ -12,12 +12,12 @@ const SECONDS_PER_ROUND = 0.1
 const ACCEPTABLE_RELATIVE_MOE = 0.01
 
 function make(benchmark, name, fn, noop) {
-	return {
+	const test = {
 		benchmark,
 		name: name || fn.name || codeOf(fn),
 		fn,
 		noop: noop,
-		state: STATE.NotStarted,
+		_state: STATE.NotStarted,
 		error: null,
 		prelim: null,
 		cycles: NaN,
@@ -26,6 +26,18 @@ function make(benchmark, name, fn, noop) {
 		runs: [],
 		maxCycles: Number(benchmark.options.maxCycles) || core.MAX_CYCLES,
 	}
+
+	Object.defineProperty(test, 'state', {
+		enumerable: true,
+		get: function() { return this._state },
+		set: function(state) {
+			const oldState = this._state
+			this._state = state
+			this.benchmark.emit('test state change', this, oldState)
+		},
+	})
+
+	return test
 }
 
 function run(test) {
@@ -41,7 +53,6 @@ function initialize(test) {
 	test.state = STATE.Running
 	test.prelim = core.estimate(test.fn, SECONDS_PER_ROUND, test.maxCycles)
 	test.cycles = clamp(test.prelim.hz * SECONDS_PER_ROUND, 1, test.maxCycles)
-	test.benchmark._onTestInitialized(test)
 	return test
 }
 
@@ -52,7 +63,6 @@ function executeRound(test) {
 	test.stats = test.stats.accumulate(run.ns)
 	if (enoughRounds(test.stats))
 		test.state = STATE.Complete
-	test.benchmark._onTestRound(test)
 	if (test.state === STATE.Running)
 		return defer.immediate(executeRound, test)
 }

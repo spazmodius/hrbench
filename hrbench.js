@@ -1,28 +1,40 @@
 'use strict'
+const EventEmitter = require('events')
+const { inherits } = require('util')
 const Test = require('./test')
 const STATE = require('./state')
+const progress = require('./progress')
 
-function Benchmark(options = {}) {
+inherits(Benchmark, EventEmitter)
+
+function Benchmark(name, options = {}) {
 	if (!(this instanceof Benchmark))
-		return new Benchmark(options)
+		return new Benchmark(name, options)
+	EventEmitter.call(this)
 
-	this.state = STATE.NotStarted
+	if (typeof(name) === 'object' && options === undefined) {
+		options = name
+		name = undefined
+	}
+
+	this.name = String(name || options.name || "Benchmark")
+	this._state = STATE.NotStarted
 	this.error = null
 	this.tests = []
-	this._onTestInitialized = function() {}
-	this._onTestRound = function() {}
 	this.options = options
+
+	progress(this)
 }
 
-Benchmark.prototype.onTestRound = function onTestRound(handler) {
-	this._onTestRound = handler
-	return this
-}
-
-Benchmark.prototype.onTestInitialized = function onTestInitialized(handler) {
-	this._onTestInitialized = handler
-	return this
-}
+Object.defineProperty(Benchmark.prototype, 'state', {
+	enumerable: true,
+	get: function() { return this._state },
+	set: function(state) {
+		const oldState = this._state
+		this._state = state
+		this.emit('state change', oldState)
+	},
+})
 
 Benchmark.prototype.test = function test(name, fn, noop) {
 	if (this.state !== STATE.NotStarted)
@@ -41,7 +53,9 @@ Benchmark.prototype.test = function test(name, fn, noop) {
 	if (noop !== undefined && typeof noop !== 'function' && noop !== null)
 		throw new RangeError('Optional argument `noop` must be a function or null')
 
-	this.tests.push(Test.make(this, name, fn, noop))
+	const newTest = Test.make(this, name, fn, noop)
+	this.tests.push(newTest)
+	this.emit('test added', newTest)
 	return this
 }
 
