@@ -4,6 +4,7 @@ const { inherits } = require('util')
 const Test = require('./lib/test')
 const STATE = require('./lib/state')
 const progress = require('./lib/progress')
+const summarize = require('./lib/summarize')
 
 inherits(Benchmark, EventEmitter)
 
@@ -98,7 +99,7 @@ Benchmark.prototype.go = function go() {
 	return queue = queue.then(run).catch(console.error)
 }
 
-Benchmark.summarize = require('./lib/summarize')
+Benchmark.summarize = summarize
 Benchmark.STATE = STATE
 
 module.exports = Benchmark
