@@ -1,9 +1,9 @@
 'use strict'
 const EventEmitter = require('events')
 const { inherits } = require('util')
-const Test = require('./test')
-const STATE = require('./state')
-const progress = require('./progress')
+const Test = require('./lib/test')
+const STATE = require('./lib/state')
+const progress = require('./lib/progress')
 
 inherits(Benchmark, EventEmitter)
 
@@ -98,7 +98,7 @@ Benchmark.prototype.go = function go() {
 	return queue = queue.then(run).catch(console.error)
 }
 
-Benchmark.summarize = require('./summarize')
+Benchmark.summarize = require('./lib/summarize')
 Benchmark.STATE = STATE
 
 module.exports = Benchmark
