@@ -62,19 +62,19 @@ Benchmark.prototype.test = function test(name, fn, noop) {
 	return this
 }
 
-Benchmark.prototype.run = function run() {
-	if (this.state !== STATE.NotStarted)
-		throw new Error('Cannot run; ' + this.state)
-	this.state = STATE.Running
+function run(benchmark) {
+	if (benchmark.state !== STATE.NotStarted)
+		throw new Error('Cannot run; ' + benchmark.state)
+	benchmark.state = STATE.Running
 
-	return _runTests(this.tests)
+	return _runTests(benchmark.tests)
 		.then(() => {
-			this.state = STATE.Complete
-			return this
+			benchmark.state = STATE.Complete
+			return benchmark
 		})
 		.catch(err => {
-			this.state = STATE.Failed
-			throw this.error = err
+			benchmark.state = STATE.Failed
+			throw benchmark.error = err
 		})
 }
 
@@ -84,7 +84,7 @@ function _runTests(tests) {
 }
 
 function _go(benchmark) {
-	return benchmark.run()
+	return run(benchmark)
 		.then(summarize)
 		.then(console.log, console.error)
 }

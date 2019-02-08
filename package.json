@@ -1,6 +1,6 @@
 {
   "name": "@spazmodius/hrbench",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "High-resolution micro-benchmarking in Node.js",
   "repository": "github:spazmodius/hrbench",
   "main": "hrbench.js"
