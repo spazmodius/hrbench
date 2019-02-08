@@ -24,9 +24,6 @@ bench.test(function medium() { crypto.randomBytes(150) })
 bench
 	.test(() => crypto.randomBytes(1500))
 	.test(() => crypto.randomBytes(15000))
-
-// finally, run them and get back a Promise
-bench.go()
 ```
 
 ## Ansync tests

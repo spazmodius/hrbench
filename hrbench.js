@@ -5,6 +5,7 @@ const Test = require('./lib/test')
 const STATE = require('./lib/state')
 const progress = require('./lib/progress')
 const summarize = require('./lib/summarize')
+const sequential = require('./lib/sequential')
 
 inherits(Benchmark, EventEmitter)
 
@@ -25,6 +26,7 @@ function Benchmark(name, options) {
 	this.options = options || {}
 
 	progress(this)
+	go(this)
 }
 
 Object.defineProperty(Benchmark.prototype, 'state', {
@@ -60,14 +62,9 @@ Benchmark.prototype.test = function test(name, fn, noop) {
 	return this
 }
 
-
 Benchmark.prototype.run = function run() {
 	if (this.state !== STATE.NotStarted)
 		throw new Error('Cannot run; ' + this.state)
-	return _run.call(this)
-}
-
-function _run() {
 	this.state = STATE.Running
 
 	return _runTests(this.tests)
@@ -86,20 +83,13 @@ function _runTests(tests) {
 	return Promise.all(runningTests)
 }
 
-let queue = Promise.resolve()
-
-Benchmark.prototype.go = function go() {
-	if (this.state !== STATE.NotStarted)
-		throw new Error('Cannot go; ' + this.state)
-	this.state = STATE.Queued
-
-	const run = () => _run.call(this)
-		.then(Benchmark.summarize)
-		.then(console.log)
-	return queue = queue.then(run).catch(console.error)
+function _go(benchmark) {
+	return benchmark.run()
+		.then(summarize)
+		.then(console.log, console.error)
 }
+const go = sequential(_go)
 
-Benchmark.summarize = summarize
 Benchmark.STATE = STATE
 
 module.exports = Benchmark
