@@ -8,7 +8,7 @@
 const crypto = require('crypto')
 const Benchmark = require('../hrbench')
 
-new Benchmark({ name: 'Getting crypto bytes' })
+Benchmark('Getting crypto bytes')
 	.test(() => crypto.randomBytes(15))
 	.test(() => crypto.randomBytes(150))
 	.test(() => crypto.randomBytes(1500))
