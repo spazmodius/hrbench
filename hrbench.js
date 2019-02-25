@@ -19,7 +19,7 @@ function Benchmark(name, options) {
 		name = undefined
 	}
 
-	this.name = String(name || options.name || "Benchmark")
+	this.name = String(name || options && options.name || "Benchmark")
 	this._state = STATE.NotStarted
 	this.error = null
 	this.tests = []
